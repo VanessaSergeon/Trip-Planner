@@ -1,4 +1,7 @@
 var express = require('express');
+var swig = require('swig');
+var sass = require('sass');
+var mongoose = require('mongoose');
 var path = require('path');
 var favicon = require('static-favicon');
 var logger = require('morgan');
@@ -10,15 +13,31 @@ var users = require('./routes/users');
 
 var app = express();
 
+// Mongoose connect
+mongoose.connect('mongodb://localhost/tripplanner');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'mongodb connection error:'));
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'html');
+app.engine('html', swig.renderFile);
 
 app.use(favicon());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
+
+app.use(
+  sass.middleware({
+    src: __dirname + '/assets', //where the sass files are
+    dest: __dirname + '/public', //where css should go
+    // includePaths: __dirname + '/assets/stylesheets',
+    debug: true // obvious
+  })
+);
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
@@ -36,6 +55,7 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
+  swig.setDefaults({ cache: false });
     app.use(function(err, req, res, next) {
         res.status(err.status || 500);
         res.render('error', {
