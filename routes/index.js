@@ -1,10 +1,11 @@
 var express = require('express');
 var router = express.Router();
+var medels = require('../models');
 
-
-/* GET home page. */
 router.get('/', function(req, res) {
-  res.render('index', { title: 'Express' });
+  models.Hotel.find(function(err, results) {
+    res.render('index', { hotels: results, title: "Trip Planner" });
+  });
 });
 
 module.exports = router;

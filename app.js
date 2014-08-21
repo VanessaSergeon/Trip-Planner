@@ -1,6 +1,6 @@
 var express = require('express');
 var swig = require('swig');
-var sass = require('sass');
+var sass = require('node-sass');
 var mongoose = require('mongoose');
 var path = require('path');
 var favicon = require('static-favicon');
@@ -13,10 +13,11 @@ var users = require('./routes/users');
 
 var app = express();
 
+
 // view engine setup
+app.engine('html', swig.renderFile);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
-app.engine('html', swig.renderFile);
 
 app.use(favicon());
 app.use(logger('dev'));
@@ -24,6 +25,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 
+// SASS setup
 app.use(
   sass.middleware({
     src: __dirname + '/assets', //where the sass files are
@@ -33,7 +35,10 @@ app.use(
   })
 );
 
+
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/bower_components', express.static(__dirname + '/bower_components'));
+
 
 app.use('/', routes);
 app.use('/users', users);
