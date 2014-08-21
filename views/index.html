@@ -1,6 +1,26 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h1>{{title}}</h1>
-    <p>Welcome to {{title}}</p>
+  <h1>{{title}}</h1>
+  <ul>
+      {% for hotel in hotels %}
+      <li>{{hotel.name}}</li>
+      {%  endfor %}
+  </ul>
+  <h1>{{title}}</h1>
+  <ul>
+      {% for restaurant in restaurants %}
+      <li>{{restaurant.name}}</li>
+      {%  endfor %}
+  </ul>
+
+  <script>
+
+    {% autoescape false %}
+    var all_hotels = {{ hotels | json }};
+    var all_restaurants = {{ restaurants | json }};
+    var all_things_to_do = {{ things_to_do | json }};
+    {% endautoescape %}
+
+  </script>
 {% endblock %}
