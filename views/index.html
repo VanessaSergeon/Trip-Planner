@@ -1,22 +1,81 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<!--   <h1>{{title}}</h1>
-  <ul>
-      {% for hotel in hotels %}
-      <li>{{hotel.name}}</li>
-      {%  endfor %}
-  </ul>
-  <h1>{{title}}</h1>
-  <ul>
-      {% for restaurant in restaurants %}
-      <li>{{restaurant.name}}</li>
-      {%  endfor %}
-  </ul> -->
 
-<nav class="navbar navbar-inverse navbar-fixed-top"></nav>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <a class="navbar-brand" href="#">Trip Planner</a>
+  <div class="navbar-left">
+    <ul class="nav navbar-nav">
+      <li><a href="/">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </div>
+</nav>
 
-<div id="map-canvas"></div>
+<div class="row">
+  <div id="content">
+    <div id="dropDowns">
+      <div class="col-lg-3">
+        <button id="newDay" class="btn btn-primary">ADD DAY</button>
+        <div id="tripDays" class="btn-group">
+          <!-- Days append here -->
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <form class="form-inline" method="post" action="******">
+          <label for="hotelDropdown">HOTELS</label>
+          <select class="form-control" id="hotelDropdown">
+            {% for hotel in hotels %}
+              <option value="{{hotel.id}}">{{hotel.name}}</option>
+            {% endfor %}
+          </select>
+          <button class="btn btn-primary" type="#">ADD</button>
+        </form>
+      </div>
+
+      <div class="col-lg-3">
+        <form class="form-inline" method="post" action="******">
+          <label for="toDoDropdown">Things to do</label>
+          <select class="form-control" id="toDoDropdown">
+            {% for thingsToDo in thingsToDos %}
+              <option value="{{thingsToDo.id}}">{{thingsToDo.name}}</option>
+            {% endfor %}
+          </select>
+          <button class="btn btn-primary" type="#">ADD</button>
+        </form>
+      </div>
+
+      <div class="col-lg-3">
+        <form class="form-inline" method="post" action="******">
+          <label for="restaurantDropdown">Restaurants</label>
+          <select class="form-control" id="restaurantDropdown">
+            {% for restaurant in restaurants %}
+              <option value="{{restaurant.id}}">{{restaurant.name}}</option>
+            {% endfor %}
+          </select>
+          <button class="btn btn-primary" type="#">ADD</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div><!-- END ROW -->
+
+<div class="row">
+  <div class="col-lg-4">
+<!--     <p>Plan will go here</p>
+    <p>Plan will go here</p>
+    <p>Plan will go here</p>
+    <p>Plan will go here</p>
+    <p>Plan will go here</p>
+    <p>Plan will go here</p>
+    <p>Plan will go here</p>
+    <p>Plan will go here</p> -->
+  </div>
+  <div class="col-lg-8">
+    <div id="map-canvas"></div>
+  </div>
+</div> <!-- END ROW -->
 
 <script>
 

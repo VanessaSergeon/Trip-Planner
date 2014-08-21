@@ -9,12 +9,14 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-nav {
-
+#content {
+  margin: 60px 20px 20px 20px;
 }
 
 #map-canvas {
-  height: 100%
+  height: 500px;
+  width: 800px;
+  margin: 25px;
 }
 
 a {

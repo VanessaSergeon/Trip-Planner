@@ -3,12 +3,16 @@
   <head>
     <title>{{title}}</title>
     <link rel="stylesheet" href="/stylesheets/style.css">
-    <link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap-theme.css">
-    <script type="text/javascript" src="../bower_components/jquery/dist/jquery.js"></script>
-    <script type="text/javascript" src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap-theme.css">
+    <script type="text/javascript" src="/bower_components/jquery/dist/jquery.js"></script>
+
+    <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+
+
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJ-e08fJ7iflkfhiCDe_2vxUMzvivjMZQ&sensor=true"></script>
+
     <script type="text/javascript">
       function initialize() {
         var mapOptions = {
@@ -25,6 +29,8 @@
 
   <body>
     {% block content %}{% endblock %}
+
+    <script src="/javascripts/custom.js"></script>
 
   </body>
 </html>
