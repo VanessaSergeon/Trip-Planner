@@ -9,6 +9,10 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+nav {
+
+}
+
 #map-canvas {
   height: 100%
 }
