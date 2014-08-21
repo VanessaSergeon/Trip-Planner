@@ -13,11 +13,6 @@ var users = require('./routes/users');
 
 var app = express();
 
-// Mongoose connect
-mongoose.connect('mongodb://localhost/tripplanner');
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'mongodb connection error:'));
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
