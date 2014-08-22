@@ -102,13 +102,24 @@ $(document).ready(function() {
     });
 
     var planItem = data[matchingSelectName][selected].name;
-    $('#hotelList').append('<li>' + planItem + '</li>');
 
-    var dayThing = data[matchingSelectName][selected].name;
-    $('#thingsList').append('<li>' + dayThing + '</li>')
+    console.log("should be type of list item", data[matchingSelectName]);
 
-    var dayRestaurant = data[matchingSelectName][selected].name;
-    $('#restaurantsList').append('<li>' + dayRestaurant + '</li>')
+    if($this.attr('data-select') == "hotels") {
+      $('#hotelList').append('<li>' + planItem + '</li>');
+    } else if($this.attr('data-select') == "thingsToDo") {
+      $('#thingsList').append('<li>' + planItem + '</li>')
+    } else {
+      $('#restaurantsList').append('<li>' + planItem + '</li>')
+    }
+
+
+
+    // var dayThing = data[matchingSelectName][selected].name;
+    // $('#thingsList').append('<li>' + dayThing + '</li>')
+
+    // var dayRestaurant = data[matchingSelectName][selected].name;
+    // $('#restaurantsList').append('<li>' + dayRestaurant + '</li>')
 
   }); // addBtn click event
 
