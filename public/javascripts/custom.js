@@ -77,12 +77,15 @@ $(document).ready(function() {
     restaurants: restaurantsObj
   };
 
+    var countHotel = 0;
+    var countThings = 0;
+    var CountRestaurants = 0;
+
   $(".addBtn").on('click',function() {
 
     event.preventDefault();
     var $this = $(this);
 
-    // this will be "thingsToDo", "restaurants", or "hotels"
     var matchingSelectName = $this.attr('data-select');
     var matchingSelect = selects[matchingSelectName];
     var selected = matchingSelect.val();
@@ -105,21 +108,18 @@ $(document).ready(function() {
 
     console.log("should be type of list item", data[matchingSelectName]);
 
-    if($this.attr('data-select') == "hotels") {
+    if(($this.attr('data-select') == "hotels") && (countHotel === 0)) {
       $('#hotelList').append('<li>' + planItem + '</li>');
-    } else if($this.attr('data-select') == "thingsToDo") {
-      $('#thingsList').append('<li>' + planItem + '</li>')
-    } else {
-      $('#restaurantsList').append('<li>' + planItem + '</li>')
+      countHotel++
     }
-
-
-
-    // var dayThing = data[matchingSelectName][selected].name;
-    // $('#thingsList').append('<li>' + dayThing + '</li>')
-
-    // var dayRestaurant = data[matchingSelectName][selected].name;
-    // $('#restaurantsList').append('<li>' + dayRestaurant + '</li>')
+    if(($this.attr('data-select') == "thingsToDo") && (countThings < 3)) {
+      $('#thingsList').append('<li>' + planItem + '</li>')
+      countThings++
+    }
+    if(($this.attr('data-select') == "restaurants") && (CountRestaurants < 3)) {
+      $('#restaurantsList').append('<li>' + planItem + '</li>')
+      CountRestaurants++
+    }
 
   }); // addBtn click event
 
@@ -127,12 +127,12 @@ $(document).ready(function() {
 
   // ******* GOOGLE MAP *******
   function initialize() {
+    var Fullstack = new google.maps.LatLng(40.716916, -73.995402);
     var mapOptions = {
-      center: new google.maps.LatLng(40.74844,-73.985664),
+      center: Fullstack,
       zoom: 13
     };
     map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-    var Fullstack = new google.maps.LatLng(40.716916, -73.995402);
     var marker = new google.maps.Marker({
       position: Fullstack,
       map: map,
