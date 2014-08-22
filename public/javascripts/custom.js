@@ -21,14 +21,19 @@ $(document).ready(function() {
 
   function Day() {
     this.hotel =[];
+    this.hotelCount = 0;
     this.thingsToDo =[];
+    this.thingsCount = 0;
     this.restaurants =[];
+    this.restaurantsCount = 0;
   }
 
 
   // ******* ADD DAY BUTTON *******
+
   var numDays = 0;
   var dayArray = [];
+
   $('#newDay').click(function() {
     numDays++
     var dayButton = '<li><a href="#">Day '+numDays+'</a></li>';
@@ -52,9 +57,9 @@ $(document).ready(function() {
     restaurants: restaurantsObj
   };
 
-    var countHotel = 0;
-    var countThings = 0;
-    var CountRestaurants = 0;
+    // var countHotel = 0;
+    // var countThings = 0;
+    // var CountRestaurants = 0;
 
   $(".addBtn").on('click',function() {
 
@@ -78,19 +83,22 @@ $(document).ready(function() {
 
     var planItem = data[matchingSelectName][selected].name;
 
-    if(($this.attr('data-select') == "hotels") && (countHotel === 0)) {
+    if(($this.attr('data-select') == "hotels") && (dayArray[numDays-1].hotelCount === 0)) {
       $('#hotelList').append('<li>' + planItem + '</li>');
-      countHotel++
+      // countHotel++
+      dayArray[numDays-1].hotelCount++;
       dayArray[numDays-1].hotel.push(selected);
     }
-    if(($this.attr('data-select') == "thingsToDo") && (countThings < 3)) {
+    if(($this.attr('data-select') == "thingsToDo") && (dayArray[numDays-1].thingsCount < 3)) {
       $('#thingsList').append('<li>' + planItem + '</li>')
-      countThings++
+      // countThings++
+      dayArray[numDays-1].thingsCount++;
       dayArray[numDays-1].thingsToDo.push(selected);
     }
-    if(($this.attr('data-select') == "restaurants") && (CountRestaurants < 3)) {
+    if(($this.attr('data-select') == "restaurants") && (dayArray[numDays-1].restaurantsCount < 3)) {
       $('#restaurantsList').append('<li>' + planItem + '</li>')
-      CountRestaurants++
+      // CountRestaurants++
+      dayArray[numDays-1].restaurantsCount++;
       dayArray[numDays-1].restaurants.push(selected);
     }
 
