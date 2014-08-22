@@ -13,9 +13,17 @@ body {
   margin: 60px 20px 20px 20px;
 }
 
+#newDay {
+  margin: 55px 0 0 20px;
+}
+
+#plan {
+  margin: 0 20px 20px 40px;
+}
+
 #map-canvas {
-  height: 500px;
-  width: 800px;
+  height: 600px;
+  width: 900px;
   margin: 25px;
 }
 
