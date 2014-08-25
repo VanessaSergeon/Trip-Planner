@@ -32,31 +32,6 @@ $(document).ready(function() {
     this.markers = [];
   }
 
-
-  // Day.prototype.getLatLng = function() {};
-  Day.prototype.renderDay = function(id) {
-    $('#plan').empty();
-
-    var thingsToDoList;
-    for(var j = 0; j < this.thingsToDo.length; j++) {
-      thingsToDoList += '<li>' + this.thingsToDo[j] + '<li>';
-    }
-    var restaurantsList;
-    for(var n = 0; n < this.restaurants.length; n++) {
-      restaurantsList += '<li>' + this.restaurants[n] + '<li>';
-    }
-    var plan = '<h3>Plan for Day ' + id + '</h3>';
-    plan += '<h4>Hotel</h4><ul>';
-    plan += '<li>' + this.hotel + '</li>';
-    plan += '</ul><h4>Things to do</h4><ul>'
-    plan += thingsToDoList;
-    plan += '</ul><h4>Restaurants</h4><ul>';
-    plan += restaurantsList;
-    plan += '</ul>';
-
-    $('#plan').append(plan);
-  };
-
   Day.prototype.clearMarkers = function() {
     for(var i = 0; i < this.markers.length; i++) {
       markers[i].setMap(null);
@@ -74,22 +49,54 @@ $(document).ready(function() {
     }
   };
 
+  // Day.prototype.getLatLng = function() {};
+  Day.prototype.renderDay = function(id) {
+    var currentId = id+1
+    $('#plan').empty();
+
+    var thingsToDoList;
+    for(var j = 0; j < this.thingsToDo.length; j++) {
+      thingsToDoList += '<li>' + this.thingsToDo[j] + '<li>';
+    }
+    var restaurantsList;
+    for(var n = 0; n < this.restaurants.length; n++) {
+      restaurantsList += '<li>' + this.restaurants[n] + '<li>';
+    }
+    var plan = '<h3>Plan for Day ' + currentId + '</h3>';
+    plan += '<h4>Hotel</h4><ul>';
+    plan += '<li>' + this.hotel + '</li>';
+    plan += '</ul><h4>Things to do</h4><ul>'
+    plan += thingsToDoList;
+    plan += '</ul><h4>Restaurants</h4><ul>';
+    plan += restaurantsList;
+    plan += '</ul>';
+
+    $('#plan').append(plan);
+
+    this.putMarkersOnMap();
+  };
+
 
   // ******* ADD DAY BUTTON *******
 
 
   $('#newDay').click(function() {
-    numDays++
+    var id = numDays++
     var dayButton = '<li><a id="'+numDays+'" href="#">Day '+numDays+'</a></li>';
     $('#tripDays').append(dayButton);
     dayArray.push(day = new Day());
-    $('a').on('click', function() {
 
-      var currentDayIndex = parseInt(this.id) - 1;
+    $('a').on('click', function() {
+      var currentDayIndex = parseInt(this.id)-1;
       currentDay = dayArray[currentDayIndex];
       console.log('this is the index number of day', currentDayIndex);
       currentDay.renderDay(this.id);
     });
+
+    console.log(this.id)
+    var currentDayIndex = id;
+    currentDay = dayArray[currentDayIndex];
+    currentDay.renderDay(id);
     // putMarkersOnMap();
     console.log("this is the day array", dayArray)
   });
@@ -129,15 +136,15 @@ $(document).ready(function() {
 
     if(($this.attr('data-select') == "hotels") && (currentDay.hotelCount === 0)) {
       currentDay.hotelCount++;
-      currentDay.hotel.push(selected);
+      currentDay.hotel.push(title);
     }
     if(($this.attr('data-select') == "thingsToDo") && (currentDay.thingsCount < 3)) {
       currentDay.thingsCount++
-      currentDay.thingsToDo.push(selected);
+      currentDay.thingsToDo.push(title);
     }
     if(($this.attr('data-select') == "restaurants") && (currentDay.restaurantsCount < 3)) {
       currentDay.restaurantsCount++;
-      currentDay.restaurants.push(selected);
+      currentDay.restaurants.push(title);
     }
 
   }); // addBtn click event
