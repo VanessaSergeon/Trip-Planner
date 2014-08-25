@@ -1,6 +1,9 @@
 $(document).ready(function() {
 
   var map;
+  var numDays = 0;
+  var dayArray = [];
+  var currentDay;
 
   var hotelObj = {};
   for(var i = 0; i < all_hotels.length; i++){
@@ -21,24 +24,73 @@ $(document).ready(function() {
 
   function Day() {
     this.hotel =[];
+    this.thingsToDo = [];
+    this.restaurants = [];
     this.hotelCount = 0;
-    this.thingsToDo =[];
     this.thingsCount = 0;
-    this.restaurants =[];
     this.restaurantsCount = 0;
+    this.markers = [];
   }
+
+
+  // Day.prototype.getLatLng = function() {};
+  Day.prototype.renderDay = function(id) {
+    $('#plan').empty();
+
+    var thingsToDoList;
+    for(var j = 0; j < this.thingsToDo.length; j++) {
+      thingsToDoList += '<li>' + this.thingsToDo[j] + '<li>';
+    }
+    var restaurantsList;
+    for(var n = 0; n < this.restaurants.length; n++) {
+      restaurantsList += '<li>' + this.restaurants[n] + '<li>';
+    }
+    var plan = '<h3>Plan for Day ' + id + '</h3>';
+    plan += '<h4>Hotel</h4><ul>';
+    plan += '<li>' + this.hotel + '</li>';
+    plan += '</ul><h4>Things to do</h4><ul>'
+    plan += thingsToDoList;
+    plan += '</ul><h4>Restaurants</h4><ul>';
+    plan += restaurantsList;
+    plan += '</ul>';
+
+    $('#plan').append(plan);
+  };
+
+  Day.prototype.clearMarkers = function() {
+    for(var i = 0; i < this.markers.length; i++) {
+      markers[i].setMap(null);
+    }
+  };
+
+  Day.prototype.putMarkersOnMap = function() {
+    for(var i = 0; i < this.markers.length; i++) {
+      var marker = new google.maps.Marker({
+        position: new google.maps.LatLng(this.markers[i][0], this.markers[i][1]),
+        animation: google.maps.Animation.DROP,
+        map: map
+        // title: title
+      });
+    }
+  };
 
 
   // ******* ADD DAY BUTTON *******
 
-  var numDays = 0;
-  var dayArray = [];
 
   $('#newDay').click(function() {
     numDays++
-    var dayButton = '<li><a href="#">Day '+numDays+'</a></li>';
+    var dayButton = '<li><a id="'+numDays+'" href="#">Day '+numDays+'</a></li>';
     $('#tripDays').append(dayButton);
     dayArray.push(day = new Day());
+    $('a').on('click', function() {
+
+      var currentDayIndex = parseInt(this.id) - 1;
+      currentDay = dayArray[currentDayIndex];
+      console.log('this is the index number of day', currentDayIndex);
+      currentDay.renderDay(this.id);
+    });
+    // putMarkersOnMap();
     console.log("this is the day array", dayArray)
   });
 
@@ -57,10 +109,6 @@ $(document).ready(function() {
     restaurants: restaurantsObj
   };
 
-    // var countHotel = 0;
-    // var countThings = 0;
-    // var CountRestaurants = 0;
-
   $(".addBtn").on('click',function() {
 
     event.preventDefault();
@@ -69,37 +117,27 @@ $(document).ready(function() {
     var matchingSelectName = $this.attr('data-select');
     var matchingSelect = selects[matchingSelectName];
     var selected = matchingSelect.val();
-
+      // selected is the id number
     var longitude = data[matchingSelectName][selected].place[0].location[0];
     var latitude = data[matchingSelectName][selected].place[0].location[1];
     var title = data[matchingSelectName][selected].name;
 
-    var marker = new google.maps.Marker({
-      position: new google.maps.LatLng(longitude, latitude),
-      animation: google.maps.Animation.DROP,
-      map: map,
-      title: title
-    });
+    var activityLocation = [longitude, latitude]
+    dayArray[numDays-1].markers.push(activityLocation);
 
     var planItem = data[matchingSelectName][selected].name;
 
-    if(($this.attr('data-select') == "hotels") && (dayArray[numDays-1].hotelCount === 0)) {
-      $('#hotelList').append('<li>' + planItem + '</li>');
-      // countHotel++
-      dayArray[numDays-1].hotelCount++;
-      dayArray[numDays-1].hotel.push(selected);
+    if(($this.attr('data-select') == "hotels") && (currentDay.hotelCount === 0)) {
+      currentDay.hotelCount++;
+      currentDay.hotel.push(selected);
     }
-    if(($this.attr('data-select') == "thingsToDo") && (dayArray[numDays-1].thingsCount < 3)) {
-      $('#thingsList').append('<li>' + planItem + '</li>')
-      // countThings++
-      dayArray[numDays-1].thingsCount++;
-      dayArray[numDays-1].thingsToDo.push(selected);
+    if(($this.attr('data-select') == "thingsToDo") && (currentDay.thingsCount < 3)) {
+      currentDay.thingsCount++
+      currentDay.thingsToDo.push(selected);
     }
-    if(($this.attr('data-select') == "restaurants") && (dayArray[numDays-1].restaurantsCount < 3)) {
-      $('#restaurantsList').append('<li>' + planItem + '</li>')
-      // CountRestaurants++
-      dayArray[numDays-1].restaurantsCount++;
-      dayArray[numDays-1].restaurants.push(selected);
+    if(($this.attr('data-select') == "restaurants") && (currentDay.restaurantsCount < 3)) {
+      currentDay.restaurantsCount++;
+      currentDay.restaurants.push(selected);
     }
 
   }); // addBtn click event
@@ -113,11 +151,6 @@ $(document).ready(function() {
       zoom: 13
     };
     map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-    var marker = new google.maps.Marker({
-      position: Fullstack,
-      map: map,
-      title: "Fullstack Academy!"
-    });
   } // initialize
   google.maps.event.addDomListener(window, 'load', initialize);
 
