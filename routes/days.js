@@ -4,18 +4,27 @@ var models = require('../models');
 
 
 router.post('/', function(req, res) {
-  //...create day...
   var day_number = req.body.day_number;
   var newDay = new models.Day({"day_number": day_number});
-  newDay.save();
-  res.send('success, a new day schema has been creaated');
+  newDay.save(function(err, day) {
+    res.json(day);
+  });
 });
 
 router.post('/:dayId/attractions', function(req, res) {
-  // ...add an attraction to day...
-  var hotels = req.body.hotels;
-  var restaurants = req.body.restaurants;
-  var thingsToDo = req.body.thingsToDo;
+  var activityId = req.body.attraction_id;
+  var dayId = req.body.dayId;
+  var activityType = req.body.attraction_type;
+
+  models.Day.findOne({"_id": dayId}, function(err, day) {
+    console.log(err);
+    day[activityType].push(activityId);
+    day.save(function(err, day) {
+      res.json(day);
+    });
+  });
+
+  res.send('info was sent to the back end');
 });
 
 router.get('/', function(req, res) {

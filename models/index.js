@@ -1,6 +1,4 @@
 var mongoose = require('mongoose');
-
-// Mongoose connect
 mongoose.connect('mongodb://localhost/tripplanner');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -37,21 +35,11 @@ var restaurantSchema = new Schema({
 
 var daySchema = new Schema({
   day_number: Number,
-  hotels: { type: Schema.Types.ObjectId, ref:"Hotel" },
+  hotels: [{ type: Schema.Types.ObjectId, ref:"Hotel" }],
   restaurants: [{ type: Schema.Types.ObjectId, ref:"Restaurant" }],
   thingsToDo: [{ type: Schema.Types.ObjectId, ref:"ThingsToDo" }]
 });
 
-/*
-  {
-    day_number: 2
-    hotel: [],
-    restaurants: [
-      {name:ksdjfs}
-    ]
-
-  }
-*/
 
 var Place = mongoose.model('Place', placeSchema);
 var Hotel = mongoose.model('Hotel', hotelSchema);

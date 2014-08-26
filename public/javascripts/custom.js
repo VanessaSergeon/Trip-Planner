@@ -3,6 +3,7 @@ $(document).ready(function() {
   var map;
   var numDays = 0;
   var dayArray = [];
+  var currentDayIndex;
   var currentDay;
 
   var hotelObj = {};
@@ -51,7 +52,7 @@ $(document).ready(function() {
 
   // Day.prototype.getLatLng = function() {};
   Day.prototype.renderDay = function(id) {
-    var currentId = id+1
+    var currentId = id;
     $('#plan').empty();
 
     var thingsToDoList;
@@ -85,10 +86,11 @@ $(document).ready(function() {
     var dayButton = '<li><a id="'+numDays+'" href="#">Day '+numDays+'</a></li>';
     $('#tripDays').append(dayButton);
     dayArray.push(day = new Day());
+
     writeDayToDatabase(id);
 
     $('a').on('click', function() {
-      var currentDayIndex = parseInt(this.id)-1;
+      currentDayIndex = parseInt(this.id)-1;
       currentDay = dayArray[currentDayIndex];
       console.log('this is the index number of day', currentDayIndex);
       currentDay.renderDay(this.id);
@@ -148,6 +150,12 @@ $(document).ready(function() {
       currentDay.restaurants.push(title);
     }
 
+    console.log('this should be activity id:', selected);
+    console.log('this should be day index:', currentDayIndex);
+    console.log('this should be activity type:', matchingSelectName);
+
+    addActivityToDay(selected, currentDay._id, matchingSelectName);
+
   }); // addBtn click event
 
 
@@ -156,9 +164,9 @@ $(document).ready(function() {
 
   function writeDayToDatabase(day_number) {
 
-    var post_callback = function (responseData) {
+    var post_callback = function (dbDay) {
       //... what to do when done...
-      console.log(responseData);
+      dayArray[dayArray.length-1]._id = dbDay._id;
     };
 
     // jQuery Ajax call
@@ -166,8 +174,9 @@ $(document).ready(function() {
 
   } // end writeDayToDatabase
 
-  function addAttractionToServer(attraction_id, dayId, type_of_place) {
+  function addActivityToDay(attraction_id, dayId, type_of_place) {
     var post_data = {
+      dayId: dayId,
       attraction_id: attraction_id,
       attraction_type: type_of_place
     };
@@ -177,11 +186,12 @@ $(document).ready(function() {
 
     var post_callback = function (responseData) {
       //... what to do when done...
+      alert(responseData);
     };
 
     // jQuery Ajax call
     $.post( "/days/" + dayId + "/attractions", post_data, post_callback);
-  } // end addAttractionToServer
+  } // end addActivityToDay
 
 
   // ******* GOOGLE MAP *******
