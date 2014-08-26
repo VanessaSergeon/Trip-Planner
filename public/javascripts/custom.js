@@ -85,6 +85,7 @@ $(document).ready(function() {
     var dayButton = '<li><a id="'+numDays+'" href="#">Day '+numDays+'</a></li>';
     $('#tripDays').append(dayButton);
     dayArray.push(day = new Day());
+    writeDayToDatabase(id);
 
     $('a').on('click', function() {
       var currentDayIndex = parseInt(this.id)-1;
@@ -148,6 +149,39 @@ $(document).ready(function() {
     }
 
   }); // addBtn click event
+
+
+  // ******* AJAX *******
+
+
+  function writeDayToDatabase(day_number) {
+
+    var post_callback = function (responseData) {
+      //... what to do when done...
+      console.log(responseData);
+    };
+
+    // jQuery Ajax call
+    $.post( "/days", day_number, post_callback);
+
+  } // end writeDayToDatabase
+
+  function addAttractionToServer(attraction_id, dayId, type_of_place) {
+    var post_data = {
+      attraction_id: attraction_id,
+      attraction_type: type_of_place
+    };
+
+    // the callback function below will be called if this request completes successfully.
+    // the server's response to this request is passed into this callback function as "responseData"
+
+    var post_callback = function (responseData) {
+      //... what to do when done...
+    };
+
+    // jQuery Ajax call
+    $.post( "/days/" + dayId + "/attractions", post_data, post_callback);
+  } // end addAttractionToServer
 
 
   // ******* GOOGLE MAP *******
