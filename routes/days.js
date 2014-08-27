@@ -17,7 +17,6 @@ router.post('/:dayId/attractions', function(req, res) {
   var activityType = req.body.attraction_type;
 
   models.Day.findOne({"_id": dayId}, function(err, day) {
-    console.log(err);
     day[activityType].push(activityId);
     day.save(function(err, day) {
       res.json(day);

@@ -25,6 +25,7 @@ $(document).ready(function() {
 
   function Day() {
     this.hotel =[];
+    this.dayId = dayArray.length + 1;
     this.thingsToDo = [];
     this.restaurants = [];
     this.hotelCount = 0;
@@ -50,25 +51,29 @@ $(document).ready(function() {
     }
   };
 
-  // Day.prototype.getLatLng = function() {};
-  Day.prototype.renderDay = function(id) {
-    var currentId = id;
+  Day.prototype.renderDay = function() {
+    var currentId = currentDay.dayId;
     $('#plan').empty();
 
-    var thingsToDoList;
+    var hotelList = "";
+    for(var q = 0; q < this.hotel.length; q++) {
+      hotelList += '<li>' + this.hotel[q] + '</li>';
+    }
+    var thingsToDoList = "";
     for(var j = 0; j < this.thingsToDo.length; j++) {
-      thingsToDoList += '<li>' + this.thingsToDo[j] + '<li>';
+      thingsToDoList += '<li>' + this.thingsToDo[j] + '</li>';
     }
-    var restaurantsList;
+    var restaurantsList = "";
     for(var n = 0; n < this.restaurants.length; n++) {
-      restaurantsList += '<li>' + this.restaurants[n] + '<li>';
+      restaurantsList += '<li>' + this.restaurants[n] + '</li>';
     }
-    var plan = '<h3>Plan for Day ' + currentId + '</h3>';
-    plan += '<h4>Hotel</h4><ul>';
-    plan += '<li>' + this.hotel + '</li>';
-    plan += '</ul><h4>Things to do</h4><ul>'
+    var plan = '<h2>Plan for Day ' + currentId + '</h2>';
+    plan += '<h3>Hotel</h3><ul>';
+    // plan += '<li>' + this.hotel + '</li>';
+    plan += hotelList;
+    plan += '</ul><h3>Things to do</h3><ul>';
     plan += thingsToDoList;
-    plan += '</ul><h4>Restaurants</h4><ul>';
+    plan += '</ul><h3>Restaurants</h3><ul>';
     plan += restaurantsList;
     plan += '</ul>';
 
@@ -92,16 +97,13 @@ $(document).ready(function() {
     $('a').on('click', function() {
       currentDayIndex = parseInt(this.id)-1;
       currentDay = dayArray[currentDayIndex];
-      console.log('this is the index number of day', currentDayIndex);
       currentDay.renderDay(this.id);
     });
 
-    console.log(this.id)
     var currentDayIndex = id;
     currentDay = dayArray[currentDayIndex];
     currentDay.renderDay(id);
     // putMarkersOnMap();
-    console.log("this is the day array", dayArray)
   });
 
 
@@ -150,11 +152,8 @@ $(document).ready(function() {
       currentDay.restaurants.push(title);
     }
 
-    console.log('this should be activity id:', selected);
-    console.log('this should be day index:', currentDayIndex);
-    console.log('this should be activity type:', matchingSelectName);
-
     addActivityToDay(selected, currentDay._id, matchingSelectName);
+    currentDay.renderDay();
 
   }); // addBtn click event
 
@@ -186,7 +185,6 @@ $(document).ready(function() {
 
     var post_callback = function (responseData) {
       //... what to do when done...
-      alert(responseData);
     };
 
     // jQuery Ajax call
